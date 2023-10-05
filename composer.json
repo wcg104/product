@@ -26,7 +26,7 @@
     "extra": {
       "laravel": {
           "providers": [
-              "wcg104\\Product\\Providers\\ProductServiceProvider"
+              "Wcg104\\Product\\Providers\\ProductServiceProvider"
           ]
       }
   }
