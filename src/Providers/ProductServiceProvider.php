@@ -1,27 +1,14 @@
 <?php
+   
+    namespace Wcg104\Product\Providers;
+    use Illuminate\Support\ServiceProvider;
+    
+    class ProductServiceProvider extends ServiceProvider {
 
-namespace Wcg104\Product\Category;
-
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Collection;
-use Illuminate\Filesystem\Filesystem;
-
-class ProductServiceProvider extends ServiceProvider
-{
-    /**
-     * Register services.
-     */
-    public function register(): void
-    {
-        //
-    }
-
-    /**
-     * Bootstrap services.
-     */
-    public function boot(): void
-    {
-            $this->publishes([
+        public function boot()
+        {
+         
+          $this->publishes([
             __DIR__.'/../database/migrations/' => database_path('migrations')
             ], 'product-category');
             $this->publishes([
@@ -33,8 +20,6 @@ class ProductServiceProvider extends ServiceProvider
             $this->publishes([
               __DIR__.'/../Requests' => app_path('Http/Requests')
             ], 'product-category');
-    }
-}
-
-
-
+        }
+   }
+?>
