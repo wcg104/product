@@ -1,0 +1,33 @@
+{
+    "name": "wcg104/product",
+    "description": "CRUD operation package for product and category in laravel",
+    "license": "MIT",
+    "keywords": [
+      "laravel",
+      "php",
+      "CRUD"
+  ],
+    "authors": [
+        {
+            "name": "Moulick",
+            "email": "moulick.r@webcodegenie.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "wcg104\\Product\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+      "php": "^8.0",
+      "laravel/framework": "^9.0"
+    },
+    "extra": {
+      "laravel": {
+          "providers": [
+              "wcg104\\Product\\Providers\\ProductServiceProvider"
+          ]
+      }
+  }
+  }
