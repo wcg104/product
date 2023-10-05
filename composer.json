@@ -15,7 +15,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "wcg104\\Product\\": "src/"
+            "Wcg104\\Product\\": "src/"
         }
     },
     "minimum-stability": "dev",
