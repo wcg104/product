@@ -37,6 +37,11 @@ Route::apiResource('/category', CategoryController::class);
 Route::apiResource('/variation', VariationController::class);
 ```
 
+
+Information
+-----
+This package is about the CRUD operations for the product , category and its variations . The category will have there own variation which will be directly applicable to the product while choseing the category. Each and every product is distinguish with the slug which is auto generated at the time of creating the product. slug is created with the product name and the product id . 
+
 License
 -----
 This package is licensed under the `MIT` License. Please see the [License File][(https://github.com/wcg104/lead/blob/master/LICENSE)](https://github.com/wcg104/product/blob/master/LICENSE)https://github.com/wcg104/product/blob/master/LICENSE for more details.
