@@ -30,7 +30,7 @@ php artisan migrate
 ```
 Add resource route in route file
 ```php
-// To use api resource add this in route and change name of lead according to your requirement
+// To use api resource add this in route and change name of product and category according to your requirement
 
 Route::apiResource('/product', ProductController::class);
 Route::apiResource('/category', CategoryController::class);
