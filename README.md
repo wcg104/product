@@ -22,7 +22,7 @@ php artisan vendor:publish --tag=product-category
 
 Usage
 -----
-To use CRUD API operation for lead module Run below command.
+To use CRUD API operation for Product Category module Run below command.
 
 Run Migration
 ```
