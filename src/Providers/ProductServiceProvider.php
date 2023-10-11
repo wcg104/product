@@ -21,7 +21,7 @@
               __DIR__.'/../Requests' => app_path('Http/Requests')
             ], 'product-category');
             $this->publishes([
-              __DIR__.'/../tests/Feature' => app_path('tests/Feature')
+              __DIR__.'/../tests/Feature' => base_path('tests/Feature')
             ], 'product-category');
         }
    }
