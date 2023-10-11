@@ -20,6 +20,9 @@
             $this->publishes([
               __DIR__.'/../Requests' => app_path('Http/Requests')
             ], 'product-category');
+            $this->publishes([
+              __DIR__.'/../tests/Feature' => app_path('tests/Feature')
+            ], 'product-category');
         }
    }
 ?>
