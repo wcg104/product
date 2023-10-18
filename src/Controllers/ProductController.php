@@ -37,9 +37,9 @@ class ProductController extends Controller
      */
 
     
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $input = request()->all();
+       
         try {
 
             DB::beginTransaction();
@@ -125,7 +125,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(updateProductRequest $request, Product $product)
     {
 
         try {
