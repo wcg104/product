@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('product_item_sizes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('product_item_id');
-            $table->string('name');
-            $table->integer('quantity');
+            $table->string('itemname');
+            $table->integer('itemquantity');
             $table->timestamps();
             $table->softDeletes();
         });

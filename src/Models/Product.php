@@ -12,34 +12,38 @@ class Product extends Model
     use HasFactory,softDeletes,HasUuids;
     protected $fillable = [
         'name',
-        'price',
+        'category_id',
         'short_description',
-        'discounted_price',
-        // 'in_stock',
-        // 'is_active',
-        // 'brand',
-        // 'cover_image',
-        // 'main_category',
-        // 'parent_product',
-        // 'images',
-        // 'value',
-        // 'variant',
-        // 'long_description',
-        // 'slug',
-        
+        'brand',
+        'is_active',
+        'product_type',
+        'slug',
+      
     ];
 
-    public static function boot()
+    public static function generateSlug($title)
+    {
+  
+      $slug = \Str::slug($title);// Query to check if slug already exists
+      $qry =Product::whereSlug($slug);
+  
+  
+      return $slug; // Return the generated slug
+  
+    }
+    protected static function boot()
     {
         parent::boot();
-        self::created(function($product){
-            $product->slug = \Str::slug($product->name).'/'.$product->id;
-        });
-        self::updated(function($product){
-            $product->slug = \Str::slug($product->name).'/'.$product->id; 
-        });
 
-       
+        static::deleting(function ($product) {
+            // Delete all related items
+            $product->items()->delete();
+        });
     }
 
+    public function items()
+    {
+        return $this->hasMany(ProductItem::class);
+    }
+  
 }

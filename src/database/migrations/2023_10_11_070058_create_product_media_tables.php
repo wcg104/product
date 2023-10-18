@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('path');
             $table->string('name');
             $table->integer('ordering');
-            $table->string('video')->default(0);
+            $table->enum('type', ['video', 'image']);
             $table->timestamps();
             $table->softDeletes();
         });
