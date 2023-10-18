@@ -20,6 +20,7 @@ php artisan vendor:publish --tag=product-category --force
 ```
 
 
+
 Usage
 -----
 To use CRUD API operation for Product Category module Run below command.
@@ -89,6 +90,66 @@ product_item_media table contain the data and type
 
 there is another api which is going to upload the image and then it will add the image in the temp folder while adding a product user needs to just add the name of the image created at the temp folder in public so while storing the product the image will be tranfer from temp folder to public_media folder.
 
+json raw data example,
+
+```
+ {
+    "name": "sparx" ,
+    "category_id": "1212",
+    "brand": "Zudio",
+    "is_active":1,
+    "product_type": "clothes",
+    "short_description": "clothing and accesories",
+    "product_item": [
+                   {
+                       
+                       "color":"Green",  
+                       "tags": "long tunic",
+                       "price": "10",
+                       "quantity":"10",
+                       "final_price" : "200",
+                       "is_available": "1",
+                       "product_item_size":[
+                           {
+                             
+                               "itemname":"sm",
+                               "itemquantity":"50"  
+                           },
+                            {
+                              
+                               "itemname":"xl",
+                               "itemquantity":"10"
+                           }
+                       ],
+                        "image" : [ "51697622499.jpg"]  
+                   },
+                   {
+                       
+                        "color":"olive green",
+                       "tags": "short tunic",
+                       "price": "10",
+                       "final_price" : "200",
+                         "quantity":"20",
+                       "is_available": "1",
+                     "product_item_size":[
+                           {
+                               "itemname":"s",
+                               "itemquantity":"50"
+                           },
+                            {
+                               "itemname":"m",
+                               "itemquantity":"10"
+                           }
+                       ],
+                       "image"  : ["41697622499.jpg"]
+                      
+                   }
+                  
+               ]
+}
+```
+
+
 License
 -----
-This package is licensed under the `MIT` License. Please see the [License File][(https://github.com/wcg104/lead/blob/master/LICENSE)](https://github.com/wcg104/product/blob/master/LICENSE)https://github.com/wcg104/product/blob/master/LICENSE for more details.
+This package is licensed under the `MIT` License. Please see the [License File][(https://github.com/wcg104/product/blob/master/LICENSE)](https://github.com/wcg104/product/blob/master/LICENSE)https://github.com/wcg104/product/blob/master/LICENSE for more details.
