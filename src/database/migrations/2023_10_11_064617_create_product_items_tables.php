@@ -15,7 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('product_id');
             $table->string('color');
-            $table->string('final_price');
+            $table->float('final_price');
+            $table->integer('price');
             $table->string('tags');
             $table->boolean('is_available');
             $table->integer('quantity');
