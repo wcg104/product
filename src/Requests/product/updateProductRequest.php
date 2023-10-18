@@ -23,25 +23,32 @@ class updateProductRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+     public function validationData()
+     {
+         return json_decode($this->getContent(), true);
+     }
     public function rules(): array
     {
         return [
-            'name' =>'required',
-            'short_description' => 'required|max:255',
-            'long_description' => 'required',
-            'in_stock' => 'required',
-            'price'=> 'required',
-            'discounted_price'=> 'required',
-            'brand'=> 'required',
-            'category'=> 'required',
-            'images'=>'array',
-            'images.*' => 'mimes:png,jpg,jpeg,webp|max:2048',
-            'cover_image' => 'mimes:png,jpg,jpeg,webp|max:2048',
-            'value' => 'required',
-            'parent_product'=>'required',
-            'main_category'=>'required',
-            'variant'=>'required',
-            'is_active'=>'boolean',
+            'name' => 'required|string|max:100',
+            'category_id' => 'required',
+            'brand' => 'required|max:100',
+            'is_active' => 'required|boolean',
+            'product_type' => 'required|',
+            'short_description' => 'required|max:150',
+            'product_item' => 'required|array',
+            'product_item.*.color' => 'required',
+            'product_item.*.tags' => 'required',
+            'product_item.*.price' => 'required|numeric',
+            'product_item.*.quantity' => 'required|numeric',
+            'product_item.*.final_price' => 'required|numeric',
+            'product_item.*.is_available' => 'required|boolean',
+            'product_item.*.product_item_size' => 'required|array',
+            'product_item.*.product_item_size.*.itemname' => 'required|max:100',
+            'product_item.*.product_item_size.*.itemquantity' => 'required|numeric',
+            'product_item.*.image' => 'required|array',
+            'product_item.*.image.*' => 'required',
+
         ];
     }
 
@@ -52,16 +59,18 @@ class updateProductRequest extends FormRequest
         return [
             "name.required" => "Please Write a title",
             "short_description.required" => "Please write some short description",
-            "long_description.requried" => "Please write some long description",
-            "in_stock.requried" => "Please write number of stock ",
-            "discounted_price.requried" => "Please write discounted price ",
-            "brand.requried" => "Please write brand's name  ",
-            "category.requried" => "Please select 1 category",
-            "cover_image.requried" => "Please add one cover image ",
-            "value.requried" => "Please add value ",
-            "parent_product.requried" => "Please select parent product  ",
-            "main_category.required" => "Please add 1 main Category",
-            "variant.required"=>"please atleast 1 variant",
+            "brand.required" => "Please write brand's name",
+            "category_id.required" => "Please select 1 category",
+            "cover_image.required" => "Please add one cover image",
+            "product_type.required" => "Please add Product Type",
+            "is_active.required" => "Please add either active or inactive for the product",
+            "color.required" => "Please enter the color for the product item",
+            "price.required" => "Please enter the price for the product item",
+            "final_price.required" => "Please enter the final price for the product item",
+            "is_available.required" => "Please enter whether the product item is available or not",
+            "quantity.required" => "Please enter the quantity for the product",
+            "tags.required" => "Please enter the tag for the product",
+            "image.required" => "Please select at least 1 image for the product",
         ];
     }
 
