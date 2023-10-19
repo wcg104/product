@@ -19,7 +19,6 @@ class ProductMedia extends Model
         'path',
         'name',
         'type',
-        'image',
         'ordering'
      ];
 

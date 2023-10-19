@@ -129,9 +129,6 @@ class ProductController extends Controller
             $input = request()->all();
 
             $product->update($input);
-
-            $product_item_ids = ProductItem::where('product_id', $product->id)->get()->pluck('id')->toArray();
-
             $testArray = [];
             foreach ($input['product_item'] as $key => $product_item) {
                 $testArray['product_id'] = $product->id;
@@ -164,44 +161,22 @@ class ProductController extends Controller
 
 
                 $old_image_delete = array_diff($old_image, $new_image);
-                $products = ProductMedia::where('product_item_id', $productitem->id)->whereIn('name', $old_image_delete)->delete();
-
-
-
-
+                
+                
+                
+                
                 $update_new_image = array_diff($new_image, $old_image);
-                foreach ($update_new_image as $key => $img) {
+                $this->moveImages($update_new_image,$productitem);
 
-                    $imgtype = \Str::after($img, '.');
-                    if ($imgtype == 'jpg' || $imgtype == 'jpeg' || $imgtype == 'png') {
-                        $type = 'image';
-                    } else {
-                        $type = 'video';
-                    }
-                    $sourcePath = public_path('images/temp/' . $img);
-                    $destinationPath = public_path('images/product_media/' . $img);
-                    $folderPath = public_path('images/product_media');
-                    if (!file_exists($folderPath)) {
-                        mkdir($folderPath, 0755, true); // Create the folder if it doesn't exist.
-                    }
-
-                    File::move($sourcePath, $destinationPath);
-                    $product_media = ProductMedia::create([
-                        'name' => $img,
-                        "image" => $img,
-                        "path" => 'images/product_media',
-                        "ordering" => $key + 1,
-                        'type' => $type,
-                        "product_item_id" => $productitem->id,
-
-                    ]);
-                }
+                
                 foreach ($new_image as $key => $update_new) {
                     $update_ordering = ProductMedia::where('name', $update_new)->update(['ordering' => $key + 1]);
                 }
-
+                
+                $products = ProductMedia::where('product_item_id', $productitem->id)->whereIn('name', $old_image_delete)->delete();
                 $this->deleteImage($old_image_delete);
             }
+            $product->load('items', 'items.images', 'items.sizes');
 
             return [
                 'type' => 'success',
@@ -275,7 +250,6 @@ class ProductController extends Controller
 
             $product_media = ProductMedia::create([
                 'name' => $img,
-                "image" => $img,
                 "path" => 'images/product_media',
                 "ordering" => $key + 1,
                 'type' => $type,
@@ -294,5 +268,3 @@ class ProductController extends Controller
         }
     }
 }
-
-
