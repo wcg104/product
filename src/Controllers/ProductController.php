@@ -48,21 +48,15 @@ class ProductController extends Controller
             $input = request()->all();
             $input['ordering'] = 1;
             $product = Product::create($input);
-            // $input['product_id'] = $product->id;
 
             foreach ($input['product_item'] as $key => $product_item) {
 
+                $input['product_item'][$key]['product_id'] = $product->id;
+                $input['product_item'][$key] ['ordering'] = $key+1;
+                $productitem = ProductItem::create(
+                    $input['product_item'][$key] 
+                );
 
-                $productitem = ProductItem::create([
-                    'color' => $product_item['color'],
-                    'quantity' => $product_item['quantity'],
-                    'price' => $product_item['price'],
-                    'final_price' => $product_item['final_price'],
-                    'is_available' => $product_item['is_available'],
-                    'tags' => $product_item['tags'],
-                    'product_id' => $product->id,
-                    'ordering' => $key + 1
-                ]);
 
 
                 $this->moveImages($product_item['image'], $productitem);
@@ -83,14 +77,13 @@ class ProductController extends Controller
                 }
             }
             DB::commit();
+            $product->load('items', 'items.images', 'items.sizes');
 
             $response = [
                 'type' => 'success',
                 'code' => 200,
                 'message' => "Product store successfully",
                 'data' => $product,
-                $productitem->id
-
             ];
 
             return response()->json($response, 200);

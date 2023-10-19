@@ -14,13 +14,13 @@ class ProductItem extends Model
    
     protected $fillable = [
         
-        'product_id',
         'color',
         'price',
         'final_price',
         'is_available',
         'quantity',
         'tags',
+        'product_id',
         'ordering'
     ];
 
