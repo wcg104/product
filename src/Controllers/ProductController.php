@@ -21,12 +21,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $Product = Product::paginate(10);
+        $products = Product::with('items', 'items.images', 'items.sizes')->paginate(10);
+
         $response = [
             'type' => 'success',
             'code' => 200,
             'message' => "List of Products",
-            'data' => $Product
+            'data' => $products
         ];
 
         return response()->json($response, 200);
@@ -36,22 +37,22 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
 
-    
+
     public function store(StoreProductRequest $request)
     {
-       
+        // $input = request()->all();
         try {
 
             DB::beginTransaction();
-                
+
             $input = request()->all();
             $input['ordering'] = 1;
             $product = Product::create($input);
             // $input['product_id'] = $product->id;
-          
-            foreach ($input['product_item'] as $key => $product_item)
-            {
- 
+
+            foreach ($input['product_item'] as $key => $product_item) {
+
+
                 $productitem = ProductItem::create([
                     'color' => $product_item['color'],
                     'quantity' => $product_item['quantity'],
@@ -59,26 +60,26 @@ class ProductController extends Controller
                     'final_price' => $product_item['final_price'],
                     'is_available' => $product_item['is_available'],
                     'tags' => $product_item['tags'],
-                    'product_id'=>$product->id,
-                    'ordering'=>$key+1
+                    'product_id' => $product->id,
+                    'ordering' => $key + 1
                 ]);
 
 
-                    $this->moveImages($product_item['image'] ,$productitem);
-                
-                
-                    $testArray2=[];
-           
+                $this->moveImages($product_item['image'], $productitem);
+
+
+                $testArray2 = [];
+
                 foreach ($product_item['product_item_size'] as $item_key => $itemname) {
-               
-                $testArray2 =  [
-                    'itemname' => $itemname['itemname'],
-                    'itemquantity'=>$itemname['itemquantity'],
-                    'product_item_id' =>$productitem->id
-                ];
-               
-                $productsize = ProductItemSize::create($testArray2);
-              
+
+                    $testArray2 = [
+                        'itemname' => $itemname['itemname'],
+                        'itemquantity' => $itemname['itemquantity'],
+                        'product_item_id' => $productitem->id
+                    ];
+
+                    $productsize = ProductItemSize::create($testArray2);
+
                 }
             }
             DB::commit();
@@ -87,12 +88,13 @@ class ProductController extends Controller
                 'type' => 'success',
                 'code' => 200,
                 'message' => "Product store successfully",
-                'data' => $product, $productitem->id
-                
-            ];   
-            
+                'data' => $product,
+                $productitem->id
+
+            ];
+
             return response()->json($response, 200);
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             \Log::error($th);
             DB::rollBack();
             $response = [
@@ -111,11 +113,12 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $product->load('items', 'items.images', 'items.sizes');
         $response = [
             'type' => 'success',
             'code' => 200,
             'message' => "Detail Product",
-            'data' => $product ,
+            'data' => $product,
         ];
 
         return response()->json($response, 200);
@@ -131,11 +134,11 @@ class ProductController extends Controller
         try {
 
             $input = request()->all();
-            
+
             $product->update($input);
 
             $product_item_ids = ProductItem::where('product_id', $product->id)->get()->pluck('id')->toArray();
-            
+
             $testArray = [];
             foreach ($input['product_item'] as $key => $product_item) {
                 $testArray['product_id'] = $product->id;
@@ -145,49 +148,73 @@ class ProductController extends Controller
                 $testArray['final_price'] = $product_item['final_price'];
                 $testArray['is_available'] = $product_item['is_available'];
                 $testArray['tags'] = $product_item['tags'];
-                $testArray['ordering'] = $key+1;
-               
-                $productitem = ProductItem::updateOrCreate(['id'=>$product_item['id']],$testArray);
-         
+                $testArray['ordering'] = $key + 1;
+
+                $productitem = ProductItem::updateOrCreate(['id' => $product_item['id']], $testArray);
+
                 $testArray2 = [];
-            foreach ($product_item['product_item_size'] as $item_key => $itemname) {
-                
-                $testArray2 = [
-                    'itemname' => $itemname['itemname'],
-                    'itemquantity'=>$itemname['itemquantity'],
-                    'product_item_id' =>$productitem->id
-                ];
+                foreach ($product_item['product_item_size'] as $item_key => $itemname) {
 
-               
-                ProductItemSize::updateOrCreate(['id'=>$itemname['id']],$testArray2);
+                    $testArray2 = [
+                        'itemname' => $itemname['itemname'],
+                        'itemquantity' => $itemname['itemquantity'],
+                        'product_item_id' => $productitem->id
+                    ];
+
+
+                    ProductItemSize::updateOrCreate(['id' => $itemname['id']], $testArray2);
+                }
+
+                $new_image = $product_item['image'];
+                $old_image = ProductMedia::where('product_item_id', $productitem->id)->pluck('name')->toArray();
+
+
+
+                $old_image_delete = array_diff($old_image, $new_image);
+                $products = ProductMedia::where('product_item_id', $productitem->id)->whereIn('name', $old_image_delete)->delete();
+
+
+
+
+                $update_new_image = array_diff($new_image, $old_image);
+                foreach ($update_new_image as $key => $img) {
+
+                    $imgtype = \Str::after($img, '.');
+                    if ($imgtype == 'jpg' || $imgtype == 'jpeg' || $imgtype == 'png') {
+                        $type = 'image';
+                    } else {
+                        $type = 'video';
+                    }
+                    $sourcePath = public_path('images/temp/' . $img);
+                    $destinationPath = public_path('images/product_media/' . $img);
+                    $folderPath = public_path('images/product_media');
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0755, true); // Create the folder if it doesn't exist.
+                    }
+
+                    File::move($sourcePath, $destinationPath);
+                    $product_media = ProductMedia::create([
+                        'name' => $img,
+                        "image" => $img,
+                        "path" => 'images/product_media',
+                        "ordering" => $key + 1,
+                        'type' => $type,
+                        "product_item_id" => $productitem->id,
+
+                    ]);
+                }
+                foreach ($new_image as $key => $update_new) {
+                    $update_ordering = ProductMedia::where('name', $update_new)->update(['ordering' => $key + 1]);
+                }
+
+                $this->deleteImage($old_image_delete);
             }
 
-            $new_image = $product_item['image'];
-            $old_image = ProductMedia::where('product_item_id',$productitem->id)->pluck('name')->toArray();
-            
-            
-            
-            $old_image_delete= array_diff($old_image , $new_image);
-            $products = ProductMedia::where('product_item_id',$productitem->id)->whereIn('name',$old_image_delete)->delete();
-            
-            
-            
-            
-            $update_new_image = array_diff($new_image,$old_image);
-            $this->moveImages($update_new_image,$productitem);
-            
-            foreach ($new_image as $key => $update_new) {
-                $update_ordering = ProductMedia::where('name',$update_new)->update(['ordering'=>$key+1]);
-            }
-            
-            $this->deleteImage($old_image_delete);
-        }
-
-        return [
-            'type' => 'success',
-            'code' => 200,
-            'message' => "Product updated successfully",
-            'data' => $product
+            return [
+                'type' => 'success',
+                'code' => 200,
+                'message' => "Product updated successfully",
+                'data' => $product
             ];
         } catch (\Throwable $th) {
 
@@ -209,11 +236,11 @@ class ProductController extends Controller
     {
         try {
 
-        $product_items = ProductItem::where('product_id',$product->id)->get();
-        foreach ($product_items as $key => $value) {
-            $value->delete();
-        }
-    
+            $product_items = ProductItem::where('product_id', $product->id)->get();
+            foreach ($product_items as $key => $value) {
+                $value->delete();
+            }
+
             $product->delete();
             $response = [
                 "type" => "success",
@@ -232,47 +259,47 @@ class ProductController extends Controller
         }
     }
 
-    public function moveImages($images , $productitem ){
+    public function moveImages($images, $productitem)
+    {
 
-        foreach ($images as $key=> $img) {
-           
-          $imgtype = \Str::after($img, '.');
-                if($imgtype == 'jpg' || $imgtype == 'jpeg' || $imgtype == 'png')
-                {
-                    $type = 'image';
-                }
-                else{
-                    $type = 'video';
-                }
-            $sourcePath = public_path('images/temp/'.$img);
-            
-        
-            $destinationPath = public_path('images/product_media/'.$img);
-            $folderPath = public_path('images/product_media');  
-                    if (!file_exists($folderPath)) {
-                        mkdir($folderPath, 0755, true); // Create the folder if it doesn't exist.
-                    }
+        foreach ($images as $key => $img) {
+
+            $imgtype = \Str::after($img, '.');
+            if ($imgtype == 'jpg' || $imgtype == 'jpeg' || $imgtype == 'png') {
+                $type = 'image';
+            } else {
+                $type = 'video';
+            }
+            $sourcePath = public_path('images/temp/' . $img);
+
+
+            $destinationPath = public_path('images/product_media/' . $img);
+            $folderPath = public_path('images/product_media');
+            if (!file_exists($folderPath)) {
+                mkdir($folderPath, 0755, true); // Create the folder if it doesn't exist.
+            }
             File::move($sourcePath, $destinationPath);
-                    
-                    $product_media =  ProductMedia::create([
-                               'name'=>$img,
-                               "image"=>$img,
-                               "path"=>'images/product_media',
-                               "ordering"=>$key+1,
-                               'type'=>$type,
-                               "product_item_id"=>$productitem->id,
-       
-                           ]);
-       
-                       }
-                }
 
-                public function deleteImage($image){
-                    foreach ($image as $key => $value) {
-                     
-                        unlink(public_path('images/product_media/'.$value));
-                    }
-                }
+            $product_media = ProductMedia::create([
+                'name' => $img,
+                "image" => $img,
+                "path" => 'images/product_media',
+                "ordering" => $key + 1,
+                'type' => $type,
+                "product_item_id" => $productitem->id,
+
+            ]);
+
+        }
     }
+
+    public function deleteImage($image)
+    {
+        foreach ($image as $key => $value) {
+
+            unlink(public_path('images/product_media/' . $value));
+        }
+    }
+}
 
 
