@@ -273,7 +273,7 @@ class ProductController extends Controller
       
         $data = request()->all();
 
-        foreach ($data['ordering'] as $key=>$product) {
+        foreach ($data['ordering'] as $product) {
             $productId = $product['id'];
             
            ProductItem::where('id',$productId)->update(['ordering'=>$product['order']]);
