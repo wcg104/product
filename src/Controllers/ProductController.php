@@ -272,17 +272,12 @@ class ProductController extends Controller
 
       
         $data = request()->all();
-        $orderingData = $data['ordering'];
-        foreach ($orderingData as $item) {
-            $ids[] = $item['id'];
-            $orders[] = $item['order'];
-        }
-        $products = ProductItem::whereIn('id', $ids)->get();
-        $orderMapping = array_combine($ids, $orders);
-        foreach ($products as $product) {
-            $productId = $product->id;
-            $order = $orderMapping[$productId];
-            $product->update(['ordering' => $order]);
+        $data = request()->all();
+
+        foreach ($data['ordering'] as $key=>$product) {
+            $productId = $product['id'];
+            
+           ProductItem::where('id',$productId)->update(['ordering'=>$product['order']]);
         }
 
         $response = [

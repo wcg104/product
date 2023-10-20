@@ -37,6 +37,8 @@ Route::apiResource('/product', ProductController::class);
 Route::apiResource('/category', CategoryController::class);
 Route::apiResource('/variation', VariationController::class);
 Route::apiResource('/upload-photo', UploadPhotoController::class);
+Route::put('/product/{id}/order',[ProductController::class,'updateOrder']); 
+
 ```
 
 
@@ -44,6 +46,8 @@ Information
 -----
 This new version of package will provide you further upgradation of the Ecommerce project . It contains Products , product_item , product_item_sizes, product_media.
 these tables are connected with the ids which means if the user will add 1 product it will be have atleast 1 or more than 1 item and 1 item have multiple sizes and multiple media whether it maybe video or image . Everything is managed by the ids. in older version everything was managed differently but in the table is changed and the data is also changed . 
+
+User can also update the ordering of the product item by simply calling the round /product/{with productid}/order so that user will get all items for that product
 
  product table contain the data and type 
 
