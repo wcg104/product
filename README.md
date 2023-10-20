@@ -87,7 +87,7 @@ where category has variant id which will help to identify which category has whi
 | countable | boolean | 
 | value | integer | 
 
-
+-----
 
 Laravel CRUD operation V2
 ======
