@@ -49,6 +49,7 @@ where category has variant id which will help to identify which category has whi
 
  | name | datatype | 
 | --------------- | --------------- | 
+| id | uuid |
 | name | varchar |
 | price | integer | 
 | short_description | varchar(150) | 
@@ -71,6 +72,7 @@ where category has variant id which will help to identify which category has whi
 
  | name | datatype | 
 | --------------- | --------------- | 
+| id | uuid |
 | title | varchar |
 | description | varchar | 
 | parent_category | uuid | 
@@ -80,6 +82,7 @@ where category has variant id which will help to identify which category has whi
 
  | name | datatype | 
 | --------------- | --------------- |
+| id | uuid |
 | category_id | uuid |
 | title | varchar |
 | type | varchar | 
@@ -87,7 +90,7 @@ where category has variant id which will help to identify which category has whi
 | countable | boolean | 
 | value | integer | 
 
-
+-----
 
 Laravel CRUD operation V2
 ======
@@ -142,6 +145,7 @@ table contain the data and type
 
  | name | datatype | 
 | --------------- | --------------- | 
+| id | uuid |
 | name | varchar |
 | category_id | uuid | 
 | short_description | varchar(150) | 
@@ -153,6 +157,7 @@ table contain the data and type
 
  | name | datatype | 
 | --------------- | --------------- | 
+| id | uuid |
 | product_id | uuid |
 | color | varchar | 
 | price | integer | 
@@ -166,6 +171,7 @@ table contain the data and type
 
  | name | datatype | 
 | --------------- | --------------- | 
+| id | uuid |
 | product_item_id | uuid |
 | itemname | varchar | 
 | itemquantity | varchar | 
@@ -174,6 +180,7 @@ product_item_media table contain the data and type
 
  | name | datatype | 
 | --------------- | --------------- | 
+| id | uuid |
 | product_item_id | uuid |
 | name | varchar | 
 | image | varchar | 
