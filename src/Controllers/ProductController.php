@@ -267,4 +267,30 @@ class ProductController extends Controller
             unlink(public_path('images/product_media/' . $value));
         }
     }
+
+    public function updateOrder($id , Request $request){
+
+      
+        $data = request()->all();
+
+        $ids = collect($data['ordering'])->pluck('id')->toArray();
+       
+        $orders = collect($data['ordering'])->pluck('order')->toArray();
+        $products = ProductItem::whereIn('id', $ids)->get();
+        foreach ($products as $product) {
+            $productId = $product->id;
+            $order = $orders[array_search($productId, $ids)];
+            $product->update(['ordering' => $order]);
+        }
+       
+
+        $response = [
+            'type' => 'success',
+            'code' => 200,
+            'message' => 'Ordering updated successfully',
+            'data' => ['ordering'=>$orders,'id' => $ids ] // Include the ID in the response
+        ];
+
+        return response()->json($response, 200);
+    }
 }
