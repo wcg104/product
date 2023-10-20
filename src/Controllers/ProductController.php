@@ -272,23 +272,24 @@ class ProductController extends Controller
 
       
         $data = request()->all();
-
-        $ids = collect($data['ordering'])->pluck('id')->toArray();
-       
-        $orders = collect($data['ordering'])->pluck('order')->toArray();
+        $orderingData = $data['ordering'];
+        foreach ($orderingData as $item) {
+            $ids[] = $item['id'];
+            $orders[] = $item['order'];
+        }
         $products = ProductItem::whereIn('id', $ids)->get();
+        $orderMapping = array_combine($ids, $orders);
         foreach ($products as $product) {
             $productId = $product->id;
-            $order = $orders[array_search($productId, $ids)];
+            $order = $orderMapping[$productId];
             $product->update(['ordering' => $order]);
         }
-       
 
         $response = [
             'type' => 'success',
             'code' => 200,
             'message' => 'Ordering updated successfully',
-            'data' => ['ordering'=>$orders,'id' => $ids ] // Include the ID in the response
+            'data' => $data // Include the ID in the response
         ];
 
         return response()->json($response, 200);
