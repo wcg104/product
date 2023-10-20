@@ -272,7 +272,6 @@ class ProductController extends Controller
 
       
         $data = request()->all();
-        $data = request()->all();
 
         foreach ($data['ordering'] as $key=>$product) {
             $productId = $product['id'];
