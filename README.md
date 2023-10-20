@@ -47,7 +47,7 @@ Information
 This new version of package will provide you further upgradation of the Ecommerce project . It contains Products , product_item , product_item_sizes, product_media.
 these tables are connected with the ids which means if the  1 product is added then it is mandatory to add  atleast 1 or more than 1 item and 1 item have multiple sizes and multiple media whether it maybe video or image . Everything is managed by the ids. in older version everything was managed differently but in the table is changed and the data is also changed . 
 
-An update of ordering of the product item is also added to the feature where user need to call another api with the route /product/{product id}/order so that the orders of the items can be re-order according to the need. 
+An update of ordering of the product item is also added to the feature where  another api with the route /product/{product id}/order so that the orders of the items can be re-order according to the need. 
 
 
 table contain the data and type 
