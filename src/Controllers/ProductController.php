@@ -283,7 +283,6 @@ class ProductController extends Controller
             'type' => 'success',
             'code' => 200,
             'message' => 'Ordering updated successfully',
-            'data' => $data // Include the ID in the response
         ];
 
         return response()->json($response, 200);
