@@ -45,11 +45,12 @@ Route::put('/product/{id}/order',[ProductController::class,'updateOrder']);
 Information
 -----
 This new version of package will provide you further upgradation of the Ecommerce project . It contains Products , product_item , product_item_sizes, product_media.
-these tables are connected with the ids which means if the user will add 1 product it will be have atleast 1 or more than 1 item and 1 item have multiple sizes and multiple media whether it maybe video or image . Everything is managed by the ids. in older version everything was managed differently but in the table is changed and the data is also changed . 
+these tables are connected with the ids which means if the  1 product is added then it is mandatory to add  atleast 1 or more than 1 item and 1 item have multiple sizes and multiple media whether it maybe video or image . Everything is managed by the ids. in older version everything was managed differently but in the table is changed and the data is also changed . 
 
-User can also update the ordering of the product item by simply calling the round /product/{with productid}/order so that user will get all items for that product
+An update of ordering of the product item is also added to the feature where user need to call another api with the route /product/{product id}/order so that the orders of the items can be re-order according to the need. 
 
- product table contain the data and type 
+
+table contain the data and type 
 
  | name | datatype | 
 | --------------- | --------------- | 
@@ -92,7 +93,7 @@ product_item_media table contain the data and type
 | path | varchar | 
 | type | enum('video','image') | 
 
-there is another api which is going to upload the image and then it will add the image in the temp folder while adding a product user needs to just add the name of the image created at the temp folder in public so while storing the product the image will be tranfer from temp folder to public_media folder.
+there is another api which is going to upload the image and then it will add the image in the temp folder while adding a product add the name of the image created at the temp folder in public so while storing the product the image will be tranfer from temp folder to public_media folder.
 
 json raw data example,
 
