@@ -41,6 +41,60 @@ class ProductController extends Controller
  * It also creates product items and their sizes, and associates them with the product.
  * If successful, it commits the transaction and returns a JSON response with the created product.
  * If an error occurs, it rolls back the transaction and returns an error JSON response.
+ *  {
+*     "name": "sparx" ,
+*     "category_id": "1212",
+*     "brand": "Zudio",
+*     "is_active":1,
+*     "product_type": "clothes",
+*     "short_description": "clothing and accesories",
+*     "product_item": [
+*                    {
+*                        
+*                        "color":"Green",  
+*                        "tags": "long tunic",
+*                        "price": "10",
+*                        "quantity":"10",
+*                        "final_price" : "200",
+*                        "is_available": "1",
+*                        "product_item_size":[
+*                            {
+*                              
+*                                "itemname":"sm",
+*                                "itemquantity":"50"  
+*                            },
+*                             {
+*                               
+*                                "itemname":"xl",
+*                                "itemquantity":"10"
+*                            }
+*                        ],
+*                         "image" : [ "51697691383.jpg"]  
+*                    },
+*                    {
+*                        
+*                         "color":"olive green",
+*                        "tags": "short tunic",
+*                        "price": "10",
+*                        "final_price" : "200",
+*                          "quantity":"20",
+*                        "is_available": "1",
+*                      "product_item_size":[
+*                            {
+*                                "itemname":"s",
+*                                "itemquantity":"50"
+*                            },
+*                             {
+*                                "itemname":"m",
+*                                "itemquantity":"10"
+*                            }
+*                        ],
+*                        "image"  : ["71697691383.jpg"]
+*                       
+*                    }
+*                   
+*                ]
+* }
  */
 
     public function store(StoreProductRequest $request)
@@ -132,6 +186,66 @@ public function show(Product $product)
  * @param updateProductRequest $request: The request containing the updated product data.
  * @param Product $product: The product instance to be updated.
  * @return array: The response indicating the success or failure of the update operation.
+ * 
+ *  {
+*    "name": "update title" ,
+*    "category_id": "11221",
+*    "brand": "Zudio",
+*    "is_active":1,
+*    "product_type": "clothes",
+*    "short_description": "clothing and accesories",
+*    "product_item": [
+*                   {
+*                       "id": "9a67aabe-274b-4574-a516-a97532d79a3f",
+*                       "color":"Olive Green",
+*                       "tags": "long tunic",
+*                       "price": "10",
+*                       "quantity":"10",
+*                       "final_price" : "200",
+*                       "is_available": "1",
+*                       "product_item_size":[
+*                           {
+*                               "id": "",
+*                               "itemname":"sm",
+*                               "itemquantity":"50"
+*                           },
+*                            {
+*                                "id":"",
+*                               "itemname":"xl",
+*                               "itemquantity":"10"
+*                           }
+*                       ],
+*                       "image" : ["51697691383.jpg", "41697691827.jpg" , "71697691827.jpg" ]
+*                      
+*                   },
+*                   {
+*                       "id": "9a67aabe-27d2-4f5f-8ce3-6723349e0981",
+*                        "color":"blue",
+*                       "tags": "short tunic",
+*                       "price": "10",
+*                       "final_price" : "200",
+*                        "quantity":"20",
+*                       "is_available": "1",
+*                     "product_item_size":[
+*                           { 
+*                               "id": "",
+*                               "itemname":"s",
+*                               "itemquantity":"50"
+*                           },
+*                            {
+*                                "id": "",
+*                               "itemname":"m",
+*                               "itemquantity":"10"
+*                           }
+*                       ],
+*                       
+*                           "image":["71697691383.jpg"]  
+*                          
+*                           
+*                      
+*                   }
+*               ]
+* }
  */
 public function update(updateProductRequest $request, Product $product)
 {
