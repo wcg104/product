@@ -15,7 +15,7 @@ class UploadPhotoController extends Controller
 
         $files = [];
         $product_image = $input['product_image'];
-        foreach ($product_image as $key => $img) {
+        foreach ($product_image as  $img) {
             $titleimage = mt_rand(3, 9) . time() . '.' . $img->extension();
             $path = $img->move('images/temp/', $titleimage);
             $files[] = $titleimage;

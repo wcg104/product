@@ -125,8 +125,6 @@ Add resource route in route file
 // To use api resource add this in route and change name of product and category according to your requirement
 
 Route::apiResource('/product', ProductController::class);
-Route::apiResource('/category', CategoryController::class);
-Route::apiResource('/variation', VariationController::class);
 Route::apiResource('/upload-photo', UploadPhotoController::class);
 Route::put('/product/{id}/order',[ProductController::class,'updateOrder']); 
 

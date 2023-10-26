@@ -167,7 +167,7 @@ class ProductController extends Controller
      * @bodyParam product_item.*.product_item_size.*.itemquantity integer Subkey in the array param for the size's quantity .
      * @bodyParam product_item.*.image array Subkey in the array param for the multiple image of the product.
      */
-    public function update(updateProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
         try {
             // Update the product with the new input data
@@ -307,32 +307,31 @@ class ProductController extends Controller
      */
     public function deleteImage($images)
     {
-        foreach ($images as $key => $value) {
+        foreach ($images as  $value) {
             unlink(public_path('images/product_media/' . $value));
         }
     }
 
-    /**
-     * Update the ordering of products in the database.
-     *
-     * @param int $id The ID of the Product.
-     * @param \Illuminate\Http\Request $request The HTTP request instance.
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updateOrder($id)
-    {
-        $data = request()->all();
-        foreach ($data['ordering'] as  $key => $product_item) {
-            $product_item_id = $product_item['id'];
-            ProductItem::where('id', $product_item_id)->update(['ordering' =>$key+1]);
-        }
-        $response = [
-            'type' => 'success',
-            'code' => 200,
-            'message' => 'Ordering updated successfully',
-            'data' => $data // Include the ID in the response
-        ];
-        return response()->json($response, 200);
-    }
 
+/**
+ * Updates the ordering of products in an order.
+ *
+ * @param int $id The ID of the order.
+ * @return \Illuminate\Http\JsonResponse The JSON response containing the result of the update.
+ */
+public function updateOrder($id)
+{
+    $data = request()->all();
+    foreach ($data['ordering'] as  $key => $product_item) {
+        $product_item_id = $product_item['id'];
+        ProductItem::where('id', $product_item_id)->update(['ordering' =>$key+1]);
+    }
+    $response = [
+        'type' => 'success',
+        'code' => 200,
+        'message' => 'Ordering updated successfully',
+        'data' => $data // Include the ID in the response
+    ];
+    return response()->json($response, 200);
+}
 }
