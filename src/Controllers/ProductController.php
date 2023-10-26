@@ -322,9 +322,9 @@ class ProductController extends Controller
     public function updateOrder($id, Request $request)
     {
         $data = request()->all();
-        foreach ($data['ordering'] as  $product_item) {
+        foreach ($data['ordering'] as  $key => $product_item) {
             $product_item_id = $product_item['id'];
-            ProductItem::where('id', $product_item_id)->update(['ordering' => $product_item['order']]);
+            ProductItem::where('id', $product_item_id)->update(['ordering' =>$key+1]);
         }
         $response = [
             'type' => 'success',
