@@ -244,8 +244,8 @@ class ProductController extends Controller
     {
         try {
             $product_items = ProductItem::where('product_id', $product->id)->get();
-            foreach ($product_items as $key => $value) {
-                $value->delete();
+            foreach ($product_items as $product_item) {
+                $product_item->delete();
             }
             $product->delete();
             $response = [
