@@ -97,7 +97,7 @@ class ProductController extends Controller
                 }
             }
             DB::commit();
-            $product->load('items', 'items.images', 'items.sizes');
+          $this->show($product);
 
             $response = [
                 'type' => 'success',
@@ -211,7 +211,7 @@ class ProductController extends Controller
             }
 
             // Load the updated product with its associated items and images and sizes.
-            $product->load('items', 'items.images', 'items.sizes');
+          $this->show($product);
 
             // Return the success response
             return [
@@ -305,9 +305,9 @@ class ProductController extends Controller
      * @param array $image The array containing the names of the images to be deleted
      * @return void
      */
-    public function deleteImage($image)
+    public function deleteImage($images)
     {
-        foreach ($image as $key => $value) {
+        foreach ($images as $key => $value) {
             unlink(public_path('images/product_media/' . $value));
         }
     }
@@ -319,7 +319,7 @@ class ProductController extends Controller
      * @param \Illuminate\Http\Request $request The HTTP request instance.
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateOrder($id, Request $request)
+    public function updateOrder($id)
     {
         $data = request()->all();
         foreach ($data['ordering'] as  $key => $product_item) {
