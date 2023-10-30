@@ -97,7 +97,7 @@ class ProductController extends Controller
                 }
             }
             DB::commit();
-          $this->show($product);
+            $this->show($product);
 
             $response = [
                 'type' => 'success',
@@ -307,31 +307,31 @@ class ProductController extends Controller
      */
     public function deleteImage($images)
     {
-        foreach ($images as  $value) {
+        foreach ($images as $value) {
             unlink(public_path('images/product_media/' . $value));
         }
     }
 
 
-/**
- * Updates the ordering of products in an order.
- *
- * @param int $id The ID of the order.
- * @return \Illuminate\Http\JsonResponse The JSON response containing the result of the update.
- */
-public function updateOrder($id)
-{
-    $data = request()->all();
-    foreach ($data['ordering'] as  $key => $product_item) {
-        $product_item_id = $product_item['id'];
-        ProductItem::where('id', $product_item_id)->update(['ordering' =>$key+1]);
+    /**
+     * Updates the ordering of products in an order.
+     *
+     * @param int $id The ID of the order.
+     * @return \Illuminate\Http\JsonResponse The JSON response containing the result of the update.
+     */
+    public function updateOrder($id)
+    {
+        $data = request()->all();
+        foreach ($data['ordering'] as $key => $product_item) {
+            $product_item_id = $product_item['id'];
+            ProductItem::where('id', $product_item_id)->update(['ordering' => $key + 1]);
+        }
+        $response = [
+            'type' => 'success',
+            'code' => 200,
+            'message' => 'Ordering updated successfully',
+            'data' => $data // Include the ID in the response
+        ];
+        return response()->json($response, 200);
     }
-    $response = [
-        'type' => 'success',
-        'code' => 200,
-        'message' => 'Ordering updated successfully',
-        'data' => $data // Include the ID in the response
-    ];
-    return response()->json($response, 200);
-}
 }
