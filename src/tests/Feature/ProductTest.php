@@ -15,7 +15,29 @@ class ProductTest extends TestCase
      *  one product with its multiple items and that multiple item have multiple images and sizes.
      *
      */
-    
+    // public function test_for_image_creating()
+    // {
+    //    $this->withoutExceptionHandling();
+    //    $api = 'api/photo';
+    //     // Positive test case
+    //    $product_image =[
+    //     'product_image'=>[
+    //         0 => UploadedFile::fake()->create("test.jpg", 100),
+    //         1 => UploadedFile::fake()->create("test.jpg", 100),
+    //         2 => UploadedFile::fake()->create("test.jpg", 100),],
+    //     ];
+       
+    //     // Set request data here
+    //     $response = $this->postJson($api,$product_image);
+
+      
+    //     $response->assertJson([
+
+    //              ]);
+
+       
+    // }
+
     //creating product with it multiple items , item sizes and images.
      public function test_for_product_creating()
      {
@@ -48,7 +70,7 @@ class ProductTest extends TestCase
                         ]
                         ],
                     //add image to the temp folder and simply define name to these image array for adding it to the product_media folder.
-                    'image'=>['71697690864.jpg']
+                    'image'=> $this->image_type()
                 ]
             ]
          ]; 
@@ -59,12 +81,12 @@ class ProductTest extends TestCase
                       'code' => 200,
                       'message' => 'Product store successfully'
                   ]);
- 
+                
         
      }
 
     
-//     // fetching all the Products
+    // fetching all the Products
     public function test_for_product_fetching_all()
     {
         // $this->test_for_product_creating();
@@ -85,7 +107,7 @@ class ProductTest extends TestCase
     public function test_for_product_updating()
     {
         // $this->test_for_product_creating();
-        $product = Product::where('deleted_at', null)->latest()->first();
+        $product = Product::first();
         
         $api = 'api/product/' . $product->id;
         $product = [
@@ -119,8 +141,7 @@ class ProductTest extends TestCase
                         ]
                         ],
                         //add image to the temp folder if want to update the older image.
-                    'image'=>['71697690864.jpg']
-
+                    'image'=>$this->image_type()
 
                 ]
             ]
@@ -261,5 +282,76 @@ class ProductTest extends TestCase
 
 
 
+    public function image_type()
+    {
+        $api = 'api/photo/';
 
+        // positive condition 
+        $product_image = [
+            'product_image' => [
+                0 => UploadedFile::fake()->create('sample.mp4', '1000', 'mp4'),
+                1 => UploadedFile::fake()->create("test.jpg", 100),
+                2 => UploadedFile::fake()->create("test.jpg", 100),
+            ],
+        ];
+
+        $response = $this->post($api, $product_image);
+        return $response['data'];
+    }
+
+
+
+    public function test_for_image_type()
+    {
+        $api = 'api/photo/';
+
+        // positive condition 
+        $product_image = [
+            'product_image' => [
+                0 => UploadedFile::fake()->create('sample.mp4', '1000', 'mp4'),
+                1 => UploadedFile::fake()->create("test.jpg", 100),
+
+            ],
+        ];
+
+        $response = $this->post($api, $product_image);
+
+        $response
+            ->assertJson([
+                'type' => "success",
+                'code' => 200,
+                'message' => 'photo created to temp folder',
+                'data'=>$response['data']
+            ]);
+            
+        $this->removeImage($response['data']);
+    }
+
+    public function test_for_file_type()
+    {
+        $api = 'api/photo/';
+        
+        // negative condition 
+        $product_image = [
+            'product_image' => [
+                0 => UploadedFile::fake()->create('sample.pdf', '1000', 'pdf'),
+                
+            ],
+        ];
+
+        $response = $this->post($api, $product_image);
+        $response
+            ->assertJson([
+                'status' => 400,
+            ]);
+    }
+
+    public function removeImage($images){
+        foreach($images as $image)
+        {
+            $imagePath = public_path().'/images/temp/'.$image;
+        
+            unlink($imagePath);
+        }
+    }
 }
