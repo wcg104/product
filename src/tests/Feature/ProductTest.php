@@ -52,7 +52,7 @@ class ProductTest extends TestCase
                         ]
                     ],
                     //add image to the temp folder and simply define name to these image array for adding it to the product_media folder.
-                    'image' => $this->image_type()
+                    'image' => $this->upload_file()
                 ]
             ]
         ];
@@ -142,7 +142,7 @@ class ProductTest extends TestCase
                         ]
                     ],
                     //add image to the temp folder if want to update the older image.
-                    'image' => $this->image_type() 
+                    'image' => $this->upload_file() 
                     
                     ]
                     
@@ -294,7 +294,7 @@ class ProductTest extends TestCase
 
 
 
-    public function image_type()
+    public function upload_file()
     {
         $api = 'api/photo/';
 
