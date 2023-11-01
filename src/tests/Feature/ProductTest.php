@@ -14,6 +14,9 @@ class ProductTest extends TestCase
     /**
      * A basic feature test example.
      *  one product with its multiple items and that multiple item have multiple images and sizes.
+     *  these feature is for create , fetch , update , delete functionality for the product. 
+     *  with all the validation which is done wheather the field is required or not , wheather the field 
+     *   
      *
      */
     
@@ -94,7 +97,13 @@ class ProductTest extends TestCase
           
     }
 
-    // //updating product
+     /**
+      * this test case will run for updating the product.
+      * first it will create an product . then it will update the product 
+      * the process for image upload will be done with checking the name of the image which is send in the array .
+      * if the image name is same  with the image name stored at the database then it will not create any new record .
+      * if any difference if found then first it will delete the image and than it will store the new image.
+      */
     public function test_for_product_updating()
     {
         $this->test_for_product_creating('no');
@@ -142,12 +151,6 @@ class ProductTest extends TestCase
 
         $response = $this->putJson($api, $update_product);
 
-
-
-        $response->assertJson([
-            'type' => "success",
-
-        ]);
         $response
             ->assertJson([
                 'type' => "success",
@@ -228,7 +231,7 @@ class ProductTest extends TestCase
          ];
 
             $response = $this->postJson($api, $product);
-        $response->assertJson([
+            $response->assertJson([
                 'type' => "error",
                 'code' => 422,
                 'message' => 'Server Validation Fail',
@@ -299,8 +302,8 @@ class ProductTest extends TestCase
         $product_image = [
             'product_image' => [
                 0 => UploadedFile::fake()->create('sample.mp4', '1000', 'mp4'),
-                // 1 => UploadedFile::fake()->create("test.jpg", 100),
-                // 2 => UploadedFile::fake()->create("test.jpg", 100),
+                1 => UploadedFile::fake()->create("test.jpg", 100),
+                
             ],
         ];
 
@@ -308,33 +311,6 @@ class ProductTest extends TestCase
         return $response['data'];
     }
 
-
-
-    public function test_for_image_type()
-    {
-        $api = 'api/photo/';
-
-        // positive condition 
-        $product_image = [
-            'product_image' => [
-                0 => UploadedFile::fake()->create('sample.mp4', '1000', 'mp4'),
-                1 => UploadedFile::fake()->create("test.jpg", 100),
-
-            ],
-        ];
-
-        $response = $this->post($api, $product_image);
-
-        $response
-            ->assertJson([
-                'type' => "success",
-                'code' => 200,
-                'message' => 'photo created to temp folder',
-                'data' => $response['data']
-            ]);
-
-        $this->removeImage($response['data']);
-    }
 
     public function test_for_file_type()
     {
@@ -353,14 +329,5 @@ class ProductTest extends TestCase
             ->assertJson([
                 'status' => 400,
             ]);
-    }
-
-    public function removeImage($images)
-    {
-        foreach ($images as $image) {
-            $imagePath = public_path() . '/images/temp/' . $image;
-
-            unlink($imagePath);
-        }
     }
 }
