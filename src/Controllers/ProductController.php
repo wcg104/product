@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\product\StoreProductRequest;
 use App\Http\Requests\product\StoreProdutItemRequest;
-use App\Http\Requests\product\updateProductRequest;
+use App\Http\Requests\product\UpdateProductRequest;
 use App\Models\Product;
 use App\Models\ProductItem;
 use App\Models\ProductItemSize;

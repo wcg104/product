@@ -296,7 +296,7 @@ class ProductTest extends TestCase
 
     public function upload_file()
     {
-        $api = 'api/photo/';
+        $api = 'api/upload-photo/';
 
         // positive condition 
         $product_image = [
@@ -314,7 +314,7 @@ class ProductTest extends TestCase
 
     public function test_for_file_type()
     {
-        $api = 'api/photo/';
+        $api = 'api/upload-photo/';
 
         // negative condition 
         $product_image = [
