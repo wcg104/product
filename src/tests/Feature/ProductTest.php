@@ -16,8 +16,7 @@ class ProductTest extends TestCase
      *  one product with its multiple items and that multiple item have multiple images and sizes.
      *
      */
-
-
+    
     //creating product with it multiple items , item sizes and images.
     public function test_for_product_creating($imageDelete = "yes")
     {
@@ -92,76 +91,79 @@ class ProductTest extends TestCase
                 'message' => 'List of Products'
             ]);
 
+          
     }
 
-    // // //updating product
-    // public function test_for_product_updating()
-    // {
-    //     $this->test_for_product_creating('no');
-    //     $product = Product::where('deleted_at', null)->latest()->first();
+    // //updating product
+    public function test_for_product_updating()
+    {
+        $this->test_for_product_creating('no');
+        $product = Product::where('deleted_at', null)->latest()->first();
+        // dd();
+      
+        $api = 'api/product/' . $product->id;
+        $update_product = [
+            'name' => 'product UPDATE',
+            'short_description' => 'this is the product testing ',
+            'is_active' => '1',
+            'brand' => 'gucci',
+            'product_type' => 'shoes',
+            'category_id' => 121212121,
+            'product_item' => [
+                [
+                    //add id of the no of items created at the time of storing for a single product. 
+                    'id' => "",
+                    'color' => 'red',
+                    'tags' => 'short tunics',
+                    'price' => 120,
+                    'final_price' => 100,
+                    'is_available' => 1,
+                    'quantity' => 100,
+                    'product_item_size' => [
+                        [
+                            //add id of the no of product item sizes created at the time of storing of product item. 
+                            'id' => "",
+                            'itemname' => 'xl',
+                            'itemquantity' => 10
+                        ],
+                        [
+                            'id' => "",
+                            'itemname' => 'xxl',
+                            'itemquantity' => 90
+                        ]
+                    ],
+                    //add image to the temp folder if want to update the older image.
+                    'image' => $this->image_type() 
+                    
+                    ]
+                    
+            ]
+        ];
 
-    //     $api = 'api/product/' . $product->id;
-    //     $update_product = [
-    //         'name' => 'product UPDATE',
-    //         'short_description' => 'this is the product testing ',
-    //         'is_active' => '1',
-    //         'brand' => 'gucci',
-    //         'product_type' => 'shoes',
-    //         'category_id' => 121212121,
-    //         'product_item' => [
-    //             [
-    //                 //add id of the no of items created at the time of storing for a single product. 
-    //                 'id' => "9a7df4a6-5037-45c3-acc9-eaab641dae47",
-    //                 'color' => 'red',
-    //                 'tags' => 'short tunics',
-    //                 'price' => 120,
-    //                 'final_price' => 100,
-    //                 'is_available' => 1,
-    //                 'quantity' => 100,
-    //                 'product_item_size' => [
-    //                     [
-    //                         //add id of the no of product item sizes created at the time of storing of product item. 
-    //                         'id' => "9a7df4b8-94c6-4fa0-b1fa-26cc4d9a2b99",
-    //                         'itemname' => 'xl',
-    //                         'itemquantity' => 10
-    //                     ],
-    //                     [
-    //                         'id' => "9a7df4b8-85df-4b5a-885e-734478357754",
-    //                         'itemname' => 'xxl',
-    //                         'itemquantity' => 90
-    //                     ]
-    //                 ],
-    //                 //add image to the temp folder if want to update the older image.
-    //                 'image' => $this->image_type()
-
-    //             ]
-    //         ]
-    //     ];
-
-    //     $response = $this->putJson($api, $update_product);
+        $response = $this->putJson($api, $update_product);
 
 
 
-    //     $response->assertJson([
-    //         'type' => "success",
+        $response->assertJson([
+            'type' => "success",
 
-    //     ]);
-    //     $response
-    //         ->assertJson([
-    //             'type' => "success",
-    //             'code' => 200,
-    //             'message' => 'Product updated successfully'
-    //         ]);
+        ]);
+        $response
+            ->assertJson([
+                'type' => "success",
+                'code' => 200,
+                'message' => 'Product updated successfully'
+            ]);
+            foreach ($response['data']['items'] as $product_item) {
 
-    //     // foreach ($response['data']['items'] as $product_item) {
+                foreach ($product_item['images'] as $image) {
+                    $imagePath = public_path() . '/images/product_media/' . $image['name'];
+                    unlink($imagePath);
+                }
 
-    //     //     foreach ($product_item['images'] as $image) {
-
-    //     //         $imagePath = public_path() . '/images/product_media/' . $image['name'];
-    //     //         unlink($imagePath);
-    //     //     }
-    //     // }
-    // }
+            }
+        
+    }
     //    //deleting product
     public function test_for_product_deleting()
     {
@@ -170,9 +172,15 @@ class ProductTest extends TestCase
 
             $api = 'api/product/' . $product->id;
 
-            // $this->removeImages(explode(',',$productid->images),$productid->cover_image);
-        $response = $this->delete($api);
+            $response = $this->delete($api);
+            foreach ($product['items'] as  $product_item) {
+                foreach ($product_item['images'] as $image) {
+                    $imagePath = public_path() . '/images/product_media/' . $image['name'];
 
+                    unlink($imagePath);
+                }
+            }
+            
             $response
             ->assertJson([
                 'type' => "success",
@@ -291,8 +299,8 @@ class ProductTest extends TestCase
         $product_image = [
             'product_image' => [
                 0 => UploadedFile::fake()->create('sample.mp4', '1000', 'mp4'),
-                1 => UploadedFile::fake()->create("test.jpg", 100),
-                2 => UploadedFile::fake()->create("test.jpg", 100),
+                // 1 => UploadedFile::fake()->create("test.jpg", 100),
+                // 2 => UploadedFile::fake()->create("test.jpg", 100),
             ],
         ];
 
