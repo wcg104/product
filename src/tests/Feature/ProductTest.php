@@ -15,28 +15,6 @@ class ProductTest extends TestCase
      *  one product with its multiple items and that multiple item have multiple images and sizes.
      *
      */
-    // public function test_for_image_creating()
-    // {
-    //    $this->withoutExceptionHandling();
-    //    $api = 'api/photo';
-    //     // Positive test case
-    //    $product_image =[
-    //     'product_image'=>[
-    //         0 => UploadedFile::fake()->create("test.jpg", 100),
-    //         1 => UploadedFile::fake()->create("test.jpg", 100),
-    //         2 => UploadedFile::fake()->create("test.jpg", 100),],
-    //     ];
-       
-    //     // Set request data here
-    //     $response = $this->postJson($api,$product_image);
-
-      
-    //     $response->assertJson([
-
-    //              ]);
-
-       
-    // }
 
     //creating product with it multiple items , item sizes and images.
      public function test_for_product_creating()
