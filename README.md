@@ -9,7 +9,7 @@ Installation
 Run a command,
 
 ```
-composer require wcg104/product v2
+composer require wcg104/product 
 ```
 To publish configurations,
 
