@@ -1,5 +1,5 @@
 
-Laravel CRUD operation V2
+Laravel CRUD operation
 ======
 
 
