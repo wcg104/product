@@ -93,6 +93,11 @@ product_item_media table contain the data and type
 | path | varchar | 
 | type | enum('video','image') | 
 
+## Software Requirements
+
+- PHP version 8.0 or higher is required to run this project.
+- Laravel framework version 10.0 or higher is also required.
+
 there is another api which is going to upload the image and then it will add the image in the temp folder while adding a product add the name of the image created at the temp folder in public so while storing the product the image will be tranfer from temp folder to public_media folder.
 
 json raw data example,
