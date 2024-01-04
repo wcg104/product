@@ -9,7 +9,7 @@ Laravel CRUD operation V1
 Run a command,
 
 ```
-composer require wcg104/product v1
+composer require wcg104/product v1.1
 ```
 ### To publish configurations,
 
